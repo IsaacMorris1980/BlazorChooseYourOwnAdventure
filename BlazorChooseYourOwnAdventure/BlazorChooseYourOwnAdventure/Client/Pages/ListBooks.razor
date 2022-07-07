@@ -1,0 +1,45 @@
+﻿@page "/Books"
+@using BlazorChooseYourOwnAdventure.Shared
+@inject HttpClient webclient;
+
+<h3>ListBooks</h3>
+@if (_allBooks == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <p>
+        Choose your own Adventure Books
+    </p>
+<table width="100%">
+     <tr>
+        <th width="20%">Name</th>
+        <th width="20%">Pages</th>
+        <th width="20%">Author</th>
+        <th width="20%">Category</th>
+        <th width="20%">Rating</th>
+    </tr>
+    <tbody>
+        @foreach (Book item in _allBooks)
+            {
+              <tr>
+                  <td width="20%">@item._booktitle?.ToString()</td>
+                  <td width="20%">@item._bookpages?.Count().ToString()</td>
+                  <td width="20%">@item._bookauthor?.ToString()</td>
+                  <td width="20%">@item._bookcategory?.ToString()</td>
+              </tr>  
+            }
+       
+    </tbody>
+
+</table>
+}
+
+@code {
+    private Book[]? _allBooks;
+    protected override async Task OnInitializedAsync()
+    {
+        _allBooks = await webclient.GetFromJsonAsync<Book[]>("Books");
+    }
+}
